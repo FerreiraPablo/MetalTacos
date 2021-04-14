@@ -19,6 +19,8 @@ If you want to create a feature, you're welcome to do it. Just clone develop and
 You can use any text editor that you like, we recomend :
 [Visual Studio Code](https://code.visualstudio.com/)
 
+*Suggestion: You can use the extension LiveServer for testing purposes.*
+
 #### The insight
 The game is divided in different JavaScript Classes, in a kind of modular Way, any new class needs to be added to the index.html
 
