@@ -12,10 +12,18 @@ var mouseEventsInjector = new MouseEventsInjector(core.renderer, core.camera, co
 //  This creates a building of one level of height, 4 width, 4 depth.
 var building = new Building([
     [
-        [1, 1, 1, 1 ],
-        [1, 1, 1, 1 ],
-        [1, 1, 1, 1 ],
-        [1, 1, 1, 1 ]
+        [2, 4, 4, 4, 4, 4, 4, 4, 4, 2],
+        
+        [2, 4, 3, 4, 4, 4, 4, 4, 3, 2],
+        
+        [2, 4, 4, 4, 4, 4, 4, 4, 5, 2],
+        
+        [2, 5, 4, 4, 4, 4, 4, 4, 4, 2],
+        
+        [2, 4, 3, 4, 4, 4, 4, 4, 4, 2],
+        
+        [2, 4, 4, 4, 4, 4, 4, 4, 4, 2],
+
     ]
 ], physics);
 
@@ -23,17 +31,53 @@ var building = new Building([
 // We set the world building.
 core.setBuilding(building)
 
-// We create a base character.
-var character = new Character(); 
 
-// And we add him to the core game.
-core.addCharacter(character, { isMe: true } );
 
 // Here we can default character controllers.
-var controller = new IsometricKeyboardCharacterController(character);
 
 
 // And some decoration.
 var lamp = new CeilingLamp();
 lamp.position.y = 2;
 core.scene.add(lamp);
+
+
+
+var server = new GlobalGameServerConnector("https://ferreirapablo.com", 4921);
+
+server.addEventListener("login sucesss", function (user) {
+    this.enterRoom("potato");
+
+
+    var myCharacter = new Character();
+    core.addCharacter(myCharacter, {
+        isMe: user.id == server.id,
+    });
+    myCharacter.respawn();
+    myCharacter.setServer(server);
+    var controller = new IsometricKeyboardCharacterController(myCharacter);
+    
+
+    core.character.addEventListener("respawn", function(event) {
+        server.updateProperty("position", event.respawnPoint);
+        server.updateProperty("quaternion", new CANNON.Quaternion(0,0,0,1));
+    });
+
+    this.addEventListener("user gone", function (user) {
+        var character = core.characters.filter(x => x.user == user)[0];
+        if (character) {
+            character.destroy();
+        }
+    })
+
+    this.addEventListener("user joined", function (user) {
+        var character = new Character();
+        core.addCharacter(character, {
+            user: user
+        });
+
+        myCharacter.sendUpdate();
+        var remoteController = new RemoteCharacterController(character, user);;
+        remoteController.updateCharacter();
+    })
+})

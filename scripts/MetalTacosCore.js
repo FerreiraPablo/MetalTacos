@@ -107,18 +107,13 @@ class MetalTacosCore {
                 }
             }
             
-            character.position.y = 1;
-
             if(data.isMe) {
                 core.cameraTarget = character;
-                var spawnPoint = this.getSpawnPoint();
-                character.position.x = spawnPoint.x;
-                character.position.z = spawnPoint.z;
-                character.position.y = spawnPoint.y + 1;
                 this.character = character;
             }   
 
             character.setPhysicBody(physics.addRigidBody(character, character.weight));
+            character.setCore(this);
             this.characters.push(character);
             this.scene.add(character);        
             return character;
@@ -130,18 +125,7 @@ class MetalTacosCore {
         requestAnimationFrame(x => this.update());
         this.physicsAdapter?.update(this.clock.getDelta());
         this.renderer.render(this.scene, this.camera);
-
-        this.characters.forEach(x => {
-            if(x.position.y < -5) {
-                x.body.sleep();
-                var spawnPoint = reference.getSpawnPoint();
-                x.body.position.set(spawnPoint.x,spawnPoint.y + 0.5,spawnPoint.z);
-                x.body.quaternion.set(0,0,0,1);
-                x.body.wakeUp();
-            }
-            x.update()
-        })
-        
+        this.characters.forEach(x => x.update());
         this.camera.lookAt((this.cameraTarget || this.scene).position) 
     }
 
@@ -155,7 +139,6 @@ class MetalTacosCore {
 
     setCameraPosition(position) {
         var reference = this;
-        
         gsap.to(reference.camera.position, {
             duration : 2,
             x : position.x,

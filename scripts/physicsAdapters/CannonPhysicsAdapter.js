@@ -43,7 +43,6 @@ class CannonPhysicsAdapter {
             var actualQuaternion = bodyReference.mesh.quaternion;
             actualPosition.set(position.x, position.y, position.z);
             actualQuaternion.set(quaternion.x, quaternion.y, quaternion.z, quaternion.w);
-        
         }
     }
 
