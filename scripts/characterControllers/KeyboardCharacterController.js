@@ -41,9 +41,9 @@ class KeyboardCharacterController extends CharacterController{
 
         cardinalPoint = cardinalPoint.join("");
 
-        if(this.pressedKeys.indexOf("Space") > -1) {
-            this.character.jump();
-        }
+        // if(this.pressedKeys.indexOf("Space") > -1) {
+        //     this.character.jump();
+        // }
 
         if(cardinalPoint) {
             this.character.move(cardinalPoint);

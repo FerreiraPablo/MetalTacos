@@ -1,6 +1,6 @@
 class CannonPhysicsAdapter {
     constructor(gravity) {
-        this.gravity = gravity || 9.81;
+        this.gravity = gravity || 1.81;
         this.bodies = [];
         this.setup();
     }
@@ -74,15 +74,23 @@ class CannonPhysicsAdapter {
         for (var mesh of meshes) {
             var parameters = {};
             var shape;
-            if(mesh.geometry) {
+            
+            if(mesh.geometry && !mesh.noPhysics) {
                 if(mesh.geometry.type == "SphereGeometry") {
                     shape = new CANNON.Sphere(mesh.geometry.parameters.radius);
+                } else if(mesh.geometry.type == "CylinderGeometry") {
+                    
+                } else if(mesh.geometry.type == "ConeGeometry") {
+                   
+                }else if(mesh.geometry.type == "BoxGeometry") {
+                   shape = new CANNON.Box(new CANNON.Vec3(mesh.geometry.parameters.width / 2, mesh.geometry.parameters.height / 2, mesh.geometry.parameters.depth / 2));
                 } else {
                     shape = threeToCannon(mesh, parameters);
                 }
             }
-            
-            bodyReference.body.addShape(shape);
+            if(shape) {
+                bodyReference.body.addShape(shape);
+            }
         }
         bodyReference.shapesLength = bodyReference.mesh.children?.length || 0;
     }

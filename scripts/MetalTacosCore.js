@@ -54,7 +54,7 @@ class MetalTacosCore {
     }
 
     setupGraphics() {
-        this.element.style.backgroundColor = "#EFEFEF";
+        this.element.style.backgroundColor = "#014E7A";
         this.element.style.margin = 0;
 
         this.scene = new THREE.Scene();
@@ -110,7 +110,7 @@ class MetalTacosCore {
             character.position.y = 1;
 
             if(data.isMe) {
-                core.cameraTarget = character;
+                //core.cameraTarget = character;
                 var spawnPoint = this.getSpawnPoint();
                 character.position.x = spawnPoint.x;
                 character.position.z = spawnPoint.z;
@@ -132,12 +132,24 @@ class MetalTacosCore {
         this.renderer.render(this.scene, this.camera);
 
         this.characters.forEach(x => {
-            if(x.position.y < -5) {
+            if(x.position.y < -2) {
+                x.kill();
                 x.body.sleep();
                 var spawnPoint = reference.getSpawnPoint();
-                x.body.position.set(spawnPoint.x,spawnPoint.y + 0.5,spawnPoint.z);
+                gsap.to(x.body.position, {
+                    x : spawnPoint.x,
+                    y : spawnPoint.y + 0.5,
+                    z : spawnPoint.z,
+                    ease: Expo.easeInOut
+                })
+
+
                 x.body.quaternion.set(0,0,0,1);
                 x.body.wakeUp();
+                x.body.velocity.setZero();
+                x.body.angularVelocity.setZero();
+                x.body.force.setZero();
+                x.body.inertia.setZero();
             }
             x.update()
         })

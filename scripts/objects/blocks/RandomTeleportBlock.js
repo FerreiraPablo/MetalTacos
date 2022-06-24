@@ -18,17 +18,22 @@ class RandomTeleportBlock extends Block {
                     if(randomBlocks.length) {
                         var randomBlock = randomBlocks[Math.floor(Math.random() * randomBlocks.length)];
                         character.body.sleep();
-                        character.body.position.set(randomBlock.position.x, randomBlock.position.y + (Block.size * 2), randomBlock.position.z);
-                        // character.body.quaternion.set(0,0,0,1);
-                        // character.body.velocity.setZero();
-                        // character.body.angularVelocity.setZero();
-                        // character.body.force.setZero();
-                        // character.body.inertia.setZero();
-                        character.body.wakeUp();
                         character.teleporting = true;
-                        setTimeout(function() {
-                            character.teleporting = false;
-                        }, 500, character)
+                        gsap.to(character.body.position, 0.25, {
+                            x: randomBlock.position.x,
+                            y: randomBlock.position.y + (Block.size * 2),
+                            z: randomBlock.position.z,
+                            onComplete: function() {
+                                character.body.quaternion.set(0,0,0,1);
+                                character.body.velocity.setZero();
+                                character.body.angularVelocity.setZero();
+                                character.body.force.setZero();
+                                character.body.inertia.setZero();
+                                character.teleporting = false;
+                                character.body.wakeUp();
+                                character.lastCollidedBlock = randomBlock;
+                            }
+                        });
                     }
                 }
             }
