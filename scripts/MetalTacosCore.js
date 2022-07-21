@@ -1,8 +1,8 @@
 class MetalTacosCore {
     characters = [];
 
-    constructor(element, physicsAdapter) {
-        this.physicsAdapter = physicsAdapter;
+    constructor(element, physics) {
+        this.physics = physics;
         this.element = element || document.body;
         this.setupGraphics();
         this.illuminate();
@@ -45,7 +45,7 @@ class MetalTacosCore {
 
 
     addEvents() {
-        window.addEventListener("resize", x => this.resize(this.element.clientWidth, this.element.clientHeight));
+        window.addEventListener("resize", x => this.resize(window.innerWidth, window.innerHeight));
     }
 
     illuminate() {
@@ -66,11 +66,10 @@ class MetalTacosCore {
         });
 
         this.renderer.setSize(window.innerWidth, window.innerHeight);
+        this.renderer.setPixelRatio( window.devicePixelRatio );
         this.renderer.domElement.style.display = "block";
         this.renderer.shadowMap.enabled = true;
-        this.renderer.shadowMap.type = THREE.BasicShawdowMap;
-        this.renderer.setClearColor(0x000000, 0)
-        
+        this.renderer.setClearColor(0x000000, 0);
         this.clock = new THREE.Clock();
 
         this.element.append(this.renderer.domElement);
@@ -114,11 +113,13 @@ class MetalTacosCore {
                 var spawnPoint = this.getSpawnPoint();
                 character.position.x = spawnPoint.x;
                 character.position.z = spawnPoint.z;
-                character.position.y = spawnPoint.y + 1;
+                character.position.y = spawnPoint.y + 0.25;
                 this.character = character;
             }   
 
-            character.setPhysicBody(physics.addRigidBody(character, character.weight));
+            if(this.physics)
+                character.setPhysicBody(this.physics.addRigidBody(character, character.weight));
+            
             this.characters.push(character);
             this.scene.add(character);        
             return character;
@@ -128,7 +129,7 @@ class MetalTacosCore {
     update() {
         var reference = this;
         requestAnimationFrame(x => this.update());
-        this.physicsAdapter?.update(this.clock.getDelta());
+        this.physics?.update(this.clock.getDelta());
         this.renderer.render(this.scene, this.camera);
 
         this.characters.forEach(x => {

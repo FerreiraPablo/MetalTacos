@@ -4,6 +4,7 @@ class Building extends THREE.Group {
 
     constructor(structure, physics) {
         super();
+        this.physics = physics;
         this.blocks = [];
         if(structure && structure.length) {
             this.structure = structure;
@@ -33,7 +34,7 @@ class Building extends THREE.Group {
             for (var z in structure[y]) {
                 for (var x in structure[y][z]) {
                     if (structure[y][z][x]) {
-                        let block = this.getBlock(structure[y][z][x], physics);
+                        let block = this.getBlock(structure[y][z][x]);
                         if (block) {
                             block.name = x + "x" + y + "x" + z;
                             block.position.x = (x * Block.size) - (this.maxWidth / 2);
@@ -44,7 +45,7 @@ class Building extends THREE.Group {
                             block.z = parseInt(z);
                             this.add(block);
                             this.blocks.push(block);
-                            block.setPhysics(physics);
+                            block.setPhysics(this.physics);
                             block.building = this;
                         }
                     }
@@ -111,9 +112,9 @@ class Building extends THREE.Group {
         this.save();
     }
 
-    getBlock(type, physics) {
+    getBlock(type) {
         if (Block.types[type]) {
-            var block = Block.types[type](physics);
+            var block = Block.types[type]();
             return block;
         }
         return null;

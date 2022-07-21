@@ -1,7 +1,5 @@
-// This controls everything about tha game physics, gravity, forces, and collisions.
-var physics = new CannonPhysicsAdapter();
-
 // This creates all the core requirements, as the renderer, camera and scene.
+var physics = new CannonPhysicsAdapter();
 var core = new MetalTacosCore(document.body, physics);
 
 // This adds mouseEvents to the 3D Renderer.
@@ -12,10 +10,54 @@ var mouseEventsInjector = new MouseEventsInjector(core.renderer, core.camera, co
 //  This creates a building of one level of height, 4 width, 4 depth.
 var building = new Building([
     [
-        [1, 1, 1, 1 ],
-        [1, 1, 1, 1 ],
-        [1, 1, 1, 1 ],
-        [1, 1, 1, 1 ]
+        [8, 8, 8, 8, 8, 8, 8, 8],
+        [8, 8, 8, 8, 8, 8, 8, 8],
+        [8, 8, 8, 8, 8, 8, 8, 8],
+        [8, 8, 8, 8, 8, 8, 8, 8],
+        [8, 8, 8, 8, 8, 8, 8, 8],
+        [8, 8, 8, 8, 8, 8, 8, 8],
+        [8, 8, 8, 8, 8, 8, 8, 8],
+        [8, 8, 8, 8, 8, 8, 8, 8],        
+    ],
+    [
+        [7, 7, 7, 7, 7, 7, 7, 7],
+        [7, 0, 0, 0, 0, 0, 0, 0],
+        [7, 0, 0, 0, 0, 0, 0, 0],
+        [7, 0, 0, 0, 0, 0, 0, 0],
+        [7, 0, 0, 0, 0, 0, 0, 0],
+        [7, 0, 0, 0, 0, 0, 0, 0],
+        [7, 0, 0, 0, 0, 0, 0, 0],
+        [7, 0, 0, 0, 0, 0, 0, 0],
+    ],
+    [
+        [7, 7, 7, 7, 7, 7, 7, 7],
+        [7, 0, 0, 0, 0, 0, 0, 0],
+        [7, 0, 0, 0, 0, 0, 0, 0],
+        [7, 0, 0, 0, 0, 0, 0, 0],
+        [7, 0, 0, 0, 0, 0, 0, 0],
+        [7, 0, 0, 0, 0, 0, 0, 0],
+        [7, 0, 0, 0, 0, 0, 0, 0],
+        [7, 0, 0, 0, 0, 0, 0, 0],
+    ],
+    [
+        [7, 7, 7, 7, 7, 7, 7, 7],
+        [7, 0, 0, 0, 0, 0, 0, 0],
+        [7, 0, 0, 0, 0, 0, 0, 0],
+        [7, 0, 0, 0, 0, 0, 0, 0],
+        [7, 0, 0, 0, 0, 0, 0, 0],
+        [7, 0, 0, 0, 0, 0, 0, 0],
+        [7, 0, 0, 0, 0, 0, 0, 0],
+        [7, 0, 0, 0, 0, 0, 0, 0],
+    ],
+    [
+        [7, 7, 7, 7, 7, 7, 7, 7],
+        [7, 0, 0, 0, 0, 0, 0, 0],
+        [7, 0, 0, 0, 0, 0, 0, 0],
+        [7, 0, 0, 0, 0, 0, 0, 0],
+        [7, 0, 0, 0, 0, 0, 0, 0],
+        [7, 0, 0, 0, 0, 0, 0, 0],
+        [7, 0, 0, 0, 0, 0, 0, 0],
+        [7, 0, 0, 0, 0, 0, 0, 0],
     ]
 ], physics);
 
@@ -35,5 +77,18 @@ var controller = new IsometricKeyboardCharacterController(character);
 
 // And some decoration.
 var lamp = new CeilingLamp();
-lamp.position.y = 2;
+lamp.position.y = 1.5;
 core.scene.add(lamp);
+
+var sun = new Sun();
+sun.position.y = 5;
+sun.position.z = -5;
+core.scene.add(sun);
+
+
+// var n = 0;
+// setInterval(() => {
+//     n += 0.05;
+//     lamp.position.z = Math.sin(n) * 2;
+//     lamp.position.x = Math.sin(n) * 2;
+// }, 1000 / 60);

@@ -98,14 +98,14 @@ class Character extends THREE.Group {
     }
 
     createBody() {
-        var bodyGeometry = new THREE.BoxGeometry(0.1,0.1,0.1);
+        var bodyGeometry = new THREE.BoxGeometry(0.1, 0.2, 0.1);
         var bodyMaterial = new THREE.MeshPhongMaterial({ 
-            color : 0x6faef0
+            color : 0x4C7A99
         });
         var bodyMesh = new THREE.Mesh(bodyGeometry, bodyMaterial);
 
         bodyMesh.castShadow = true;
-        bodyMesh.recieveShadow = true;
+        bodyMesh.receiveShadow = true;
         this.add(bodyMesh);
     }
 

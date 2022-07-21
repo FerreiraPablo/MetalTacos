@@ -1,14 +1,18 @@
 class Block extends THREE.Group {
     isBlock = true;
-    constructor(color) {
+    constructor(color, size) {
         super()
-        var geometry = new THREE.BoxGeometry(Block.size, Block.size, Block.size);
-        var material = new THREE.MeshPhongMaterial({
-            color : typeof color === 'undefined' ? 0x222222 : color
+        size = size || Block.size;
+        var geometry = new THREE.BoxGeometry(size, size, size);
+        var material =  typeof color === 'undefined' ? Block.DefaultMaterial : new THREE.MeshPhongMaterial({
+            color : color,
+            transparent: true,
+            depthWrite: true
         });
+
         this.block = new THREE.Mesh(geometry, material);
         this.block.castShadow = true;
-        this.block.recieveShadow = true;
+        this.block.receiveShadow = true;
         this.add(this.block);
 
 
@@ -24,7 +28,6 @@ class Block extends THREE.Group {
         })
     } 
 
-
     get color() { 
         return this.block.material.color.getHex()
     }
@@ -32,8 +35,9 @@ class Block extends THREE.Group {
     set color(value) { 
         return this.block.material.color.setHex(value)
     }
-
     setPhysics(physics) {
+        if(!physics)
+            return;
         physics.addRigidBody(this)
 
         if(this.startPhysics) {
@@ -47,6 +51,11 @@ class Block extends THREE.Group {
         })
     }
 }
+
+Block.DefaultMaterial = new THREE.MeshPhongMaterial({
+    color : 0xc2bcb7,
+    depthWrite: true
+});
 
 Block.size = 0.3;
 Block.types = [

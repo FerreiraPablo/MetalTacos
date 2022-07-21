@@ -34,16 +34,14 @@ class Sun extends Light {
             color : 0xFFFFFF
         })
         this.star = new THREE.Mesh(this.starGeometry, this.starMaterial);
-        this.light = new THREE.SpotLight( 0xffffff, 0.9, undefined, undefined, 1);
+        this.light = new THREE.SpotLight( 0xffffff, 0.05, undefined, undefined, 1);
         this.light.castShadow = true;
-        this.light.shadow.mapSize.width = 1024;
-        this.light.shadow.mapSize.height = 1024;
-        this.light.shadow.camera.near = 500;
-        this.light.shadow.camera.far = 4000;
+        this.light.shadow.mapSize.width = 2048;
+        this.light.shadow.mapSize.height = 2048;
+        this.light.shadow.camera.near = 0.1;
+        this.light.shadow.camera.far = 10;
         this.light.shadow.camera.fov = 30;
-        this.star.add(this.light);
-        this.add(this.star);
-    }
-
-    
+        this.add(this.light);
+        //this.add(this.star);
+    }    
 }
